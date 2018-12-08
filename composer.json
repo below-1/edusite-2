@@ -1,0 +1,14 @@
+{
+    "config": {
+        "platform": {
+            "php": "5.6.38"
+        }
+    },
+    "require": {
+        "twig/twig": "1.31.*",
+        "doctrine/orm": "^2.5"
+    },
+    "autoload": {
+        "psr-0": {"Edusite\\": "src/"}
+    }
+}

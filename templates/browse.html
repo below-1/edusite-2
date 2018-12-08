@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+        {{ include('commons/head.html') }}
+        <link rel="stylesheet" href="/static/css/main.css">
+        <link type="text/css" rel="stylesheet" href="/static/css/mat-card.css"/>
+    </head>
+	<body>
+        <!-- Header -->
+        {% if loggedIn is defined %}
+            {{ include('commons/header-user.html') }}
+        {% else %}
+            {{ include('commons/guest-header.html') }}
+        {% endif %}
+        <!-- /Header -->
+
+        {{ include('commons/parallax.html') }}
+
+        <div id="vueApp">
+            <div id="kec-select-container">
+                <h5 style="margin-right: 20px;">Pilih Kecamatan</h5>
+                <v-select
+                    style="max-width: 200px; min-width: 200px;"
+                    v-bind:on-change="onChangeKecamatan"
+                    v-model="selectedKecamatan" :options="kecamatan"></v-select>
+                <button class="btn btn-default btn-lg" style="margin: 0 8px;" v-on:click="onChartActive">Chart</button>
+                <button class="btn btn-default btn-lg" v-on:click="onMapActive">Map</button>
+            </div>
+            <div v-if="state == 'chart'">
+                <ul class="nav nav-tabs">
+
+                    <li role="presentation"
+                        v-bind:class="{ 'active': chartType == 'tipeSekolah' }"
+                        v-on:click="onChartTypeChange('tipeSekolah')">
+                        <a>Tipe Sekolah</a>
+                    </li>
+
+                    <li role="presentation"
+                        v-bind:class="{ 'active': chartType == 'akreditasi' }"
+                        v-on:click="onChartTypeChange('akreditasi')"
+                    ><a>Akreditasi</a></li>
+                    
+                    <li role="presentation"
+                        v-bind:class="{ 'active': chartType == 'sn' }"
+                        v-on:click="onChartTypeChange('sn')"
+                    ><a>Swasta/Negri</a></li>
+
+                    <li role="presentation"
+                        v-bind:class="{ 'active': chartType == 'bbf' }"
+                        v-on:click="onChartTypeChange('bbf')"
+                    ><a>Swasta/Negri</a></li>
+
+                </ul>
+                <div id="tipeSekolahChart" style="height: 460px; margin: 0px auto;">
+                </div>
+            </div>
+            <div v-if="state == 'map'" id="map" style="height: 500px;"></div>
+            <div class="container-fluid well">
+                <div class="row" style="padding-top: 12px; padding-bottom: 12px;">
+                    <div class="kategori-box col-sm-3 equal-box">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Rangkuman Per Kategori
+                            </div>
+                            <table class='table table-hover table-striped'>
+                                <thead>
+                                    <tr>
+                                        <td>Kategori</td>
+                                        <td>Jumlah</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% raw %}
+                                    <tr v-for="(it, i) in kategori" :key="i">
+                                        <td>{{ it.nama }}</td>
+                                        <td>{{ it.total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>{{ totalPerKategori }}</td>
+                                    </tr>
+                                    {% endraw %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="akreditasi-box col-sm-3 equal-box">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Rangkuman Akreditasi
+                            </div>
+                            <table class='table table-hover table-striped'>
+                                <thead>
+                                    <tr>
+                                        <td>Akreditasi</td>
+                                        <td>Jumlah</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% raw %}
+                                    <tr v-for="(it, i) in akreditasi" :key="i">
+                                        <td>{{ it.akreditasi }}</td>
+                                        <td>{{ it.total }}</td>
+                                    </tr>
+                                    {% endraw %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="akreditasi-box col-sm-3 equal-box">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Swasta / Negri
+                            </div>
+                            <table class='table table-hover table-striped'>
+                                <thead>
+                                    <tr>
+                                        <td>Tipe</td>
+                                        <td>Jumlah</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% raw %}
+                                    <tr v-for="(it, i) in sn" :key="i">
+                                        <td>{{ it.sn }}</td>
+                                        <td>{{ it.total }}</td>
+                                    </tr>
+                                    {% endraw %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="akreditasi-box col-sm-3 equal-box">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                Jumlah Siswa Per Kategori Sekolah
+                            </div>
+                            <table class='table table-hover table-striped'>
+                                <thead>
+                                    <tr>
+                                        <td>Tipe</td>
+                                        <td>Jumlah</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% raw %}
+                                    <tr v-for="(it, i) in jumlahCount" :key="i">
+                                        <td>{{ it.nama }}</td>
+                                        <td>{{ it.total }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Total</td>
+                                        <td>{{ totalSiswaPerKategori }}</td>
+                                    </tr>
+                                    {% endraw %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+        </div>
+
+		<!-- Footer -->
+		<footer id="footer" class="section">
+
+			<!-- container -->
+			<div class="container">
+
+				<!-- row -->
+				<div class="row">
+
+					<!-- footer logo -->
+					<div class="col-md-6">
+						<div class="footer-logo">
+							<a class="logo" href="index.html">
+								<img src="./img/logo.png" alt="logo">
+							</a>
+						</div>
+					</div>
+					<!-- footer logo -->
+
+					<!-- footer nav -->
+					<div class="col-md-6">
+						<ul class="footer-nav">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="#">About</a></li>
+							<li><a href="#">Courses</a></li>
+							<li><a href="blog.html">Blog</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</div>
+					<!-- /footer nav -->
+
+				</div>
+				<!-- /row -->
+
+				<!-- row -->
+				<div id="bottom-footer" class="row">
+
+					<!-- social -->
+					<div class="col-md-4 col-md-push-8">
+						<ul class="footer-social">
+							<li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="instagram"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="#" class="youtube"><i class="fa fa-youtube"></i></a></li>
+							<li><a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+					<!-- /social -->
+
+					<!-- copyright -->
+					<div class="col-md-8 col-md-pull-4">
+						<div class="footer-copyright">
+							<span>&copy; Copyright 2018. All Rights Reserved. | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com">Colorlib</a></span>
+						</div>
+					</div>
+					<!-- /copyright -->
+
+				</div>
+				<!-- row -->
+
+			</div>
+			<!-- /container -->
+
+		</footer>
+		<!-- /Footer -->
+
+		<!-- preloader -->
+		<div id='preloader'><div class='preloader'></div></div>
+		<!-- /preloader -->
+
+        {{ include('commons/bottom-script.html') }}
+        <script>
+            $(document).ready(function(){
+                var zindex = 10;
+                
+                $("div.card").click(function(e){
+                
+                    var isShowing = false;
+                
+                    if ($(this).hasClass("show")) {
+                    isShowing = true
+                    }
+                
+                    if ($("div.cards").hasClass("showing")) {
+                    // a card is already in view
+                    $("div.card.show")
+                        .removeClass("show");
+                
+                    if (isShowing) {
+                        // this card was showing - reset the grid
+                        $("div.cards")
+                        .removeClass("showing");
+                    } else {
+                        // this card isn't showing - get in with it
+                        $(this)
+                        .css({zIndex: zindex})
+                        .addClass("show");
+                
+                    }
+                
+                    zindex++;
+                
+                    } else {
+                    // no cards in view
+                    $("div.cards")
+                        .addClass("showing");
+                    $(this)
+                        .css({zIndex:zindex})
+                        .addClass("show");
+                
+                    zindex++;
+                    }
+                    
+                });
+            });
+        </script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1UhV7s_4c-E3p33HyK_P-N7uEs8qqfpg&language=id&region=ID"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.core.min.js"></script>
+        <script src="https://unpkg.com/vue-select@latest"></script>
+        <script>
+            Vue.component('v-select', VueSelect.VueSelect);
+            var map;
+            var gmarkers = [];
+            var infowindow = new google.maps.InfoWindow();
+
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: -9.859565, lng: 124.278409},
+                    zoom: 14,
+                    mapTypeId: google.maps.MapTypeId.ROADMAP,
+                    mapTypeControl: false
+                });
+                
+                var locations = [
+                    {% for it in mapItems %}
+                        ["{{ it['nama'] }}", {{ it['latitude'] }}, {{ it['longitude'] }}, 4, {{ it['id'] }}],
+                    {% endfor %}
+                ];
+
+                var marker, i;
+
+                for (i = 0; i < locations.length; i++) {  
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+                        map: map
+                    });
+                    gmarkers.push(marker);
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent(`<div><a href="/app/guest/index.php?sekolahId=${locations[i][4]}">${locations[i][0]}</a></div>`);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            }
+
+            function explodePie (e) {
+                if(typeof (e.dataSeries.dataPoints[e.dataPointIndex].exploded) === "undefined" || !e.dataSeries.dataPoints[e.dataPointIndex].exploded) {
+                    e.dataSeries.dataPoints[e.dataPointIndex].exploded = true;
+                } else {
+                    e.dataSeries.dataPoints[e.dataPointIndex].exploded = false;
+                }
+                e.chart.render();
+
+            }
+
+            function initChart (title, items) {
+                var chart = new CanvasJS.Chart("tipeSekolahChart", {
+                    exportEnabled: true,
+                    animationEnabled: true,
+                    title:{
+                        text: 'Perbandingan ' + title
+                    },
+                    legend:{
+                        cursor: "pointer",
+                        itemclick: explodePie
+                    },
+                    data: [{
+                        type: "pie",
+                        showInLegend: true,
+                        toolTipContent: "<strong>{label}%</strong>",
+                        indexLabel: "{label} - {y}%",
+                        dataPoints: items
+                    }]
+                });
+                chart.render();
+            }
+
+            var vueApp = new Vue({
+                el: '#vueApp',
+                data: {
+                    items: [],
+                    message: 'Hello Vue!',
+                    kecamatan: [],
+                    kategori: [],
+                    akreditasi: [],
+                    sn: [],
+                    bbf: [],
+                    jumlahCount: [],
+                    totalSiswaPerKategori: 0,
+                    totalPerKategori: 0,
+                    selectedKecamatan: 'SEMUA',
+                    state: 'map',
+                    chartType: 'tipeSekolah'
+                },
+                computed: {
+                    selectedKec () {
+                        return this.kecamatan.filter(k => k.selected).map(k => k.name);
+                    }
+                },
+                mounted () {
+                    axios('/app/api/kecamatan.php')
+                        .then(resp => resp.data)
+                        .then(items => {
+                            this.kecamatan = items.map(it => {
+                                return { label: it.nama, value: it.nama, selected: false };
+                            });
+                            let kecs = items.map(it => it.nama);
+                            this.kecamatan.push({ label: 'SEMUA', value: 'SEMUA', selected: true });
+                            return kecs;
+                        })
+                        .then(kecs => { this.reload(kecs); });
+                },
+                methods: {
+                    buildChartData (ct) {
+                        let items = [];
+                        let key = 'nama';
+                        let title = '';
+                        switch (ct) {
+                            case 'tipeSekolah':
+                                items = this.kategori;
+                                title = 'Tipe Sekolah';
+                                break;
+                            case 'akreditasi':
+                                items = this.akreditasi;
+                                key = 'akreditasi';
+                                title = 'Akreditasi';
+                                break;
+                            case 'sn':
+                                items = this.sn;
+                                title = 'Swasta dan Negri';
+                                key = 'sn';
+                                break;
+                            case 'bbf':
+                                items = this.bbf;
+                                title = 'Kondisi Bangunan, Bantuan, dan Fasilitas';
+                                key = 'kategori';
+                                break;
+                        };
+                        items = items.map(it => {
+                            let t = 0;
+                            if (!isNaN(it.total)) {
+                                t = parseInt(it.total);
+                            }
+                            return {
+                                y: t,
+                                name: it[key]
+                            };
+                        });
+                        let total = _.sumBy(items, x => x.y) * 1.0;
+                        items = items.map(item => {
+                            let y = 0;
+                            if (total != 0) {
+                                y = (item.y / total) * 100;
+                            }
+                            return {
+                                y: y,
+                                label: item.name,
+                                legendText: item.name
+                            };
+                        });
+                        console.log(items);
+                        return { title, items };
+                    },
+                    onChartActive () {
+                        this.state = 'chart';
+                        let ct = this.chartType;
+                        let p = this.buildChartData(ct);
+                        Vue.nextTick(() => {
+                            initChart(p.title, p.items);
+                        });
+                    },
+                    onChartTypeChange (ct) {
+                        this.chartType = ct;
+                        let p = this.buildChartData(this.chartType);
+                        Vue.nextTick(() => {
+                            initChart(p.title, p.items);
+                        });
+                    },
+                    onMapActive () {
+                        this.state = 'map';
+                        Vue.nextTick(() => {
+                            initMap();
+                            this.rebuildMarkers(this.items);
+                        });
+                    },
+                    onChangeKecamatan (val) {
+                        if (val == null) return;
+                        if (val == undefined) return;
+                        let allKec = this.kecamatan.map(it => it.value);
+                        if (val.value == 'SEMUA') {
+                            allKec.pop();
+                            return this.reload(allKec);
+                        }
+                        return this.reload([ val.value ]);
+                    },
+                    reload (kecs) {
+                        if (kecs.length == 0) {
+                            return;
+                        }
+                        if (kecs[0] == undefined) {
+                            return;
+                        }
+                        console.log('kecamatans', kecs);
+                        return axios.post('/app/api/summary.php', { kecamatan: kecs })
+                            .then(resp => resp.data)
+                            .then(items => {
+                                console.log(items.bbf);
+                                this.akreditasi = items.akreditasi;
+                                this.sn = items.sn;
+                                this.bbf = items.bbf;
+                                
+                                this.jumlahCount = items.jumlahCount.map(it => {
+                                    console.log(it);
+                                    switch (parseInt(it.kategori)) {
+                                        case 1:
+                                            it.nama = 'PAUD';
+                                            break;
+                                        case 2:
+                                            it.nama = 'TK';
+                                            break;
+                                        case 3:
+                                            it.nama = 'SD';
+                                            break;
+                                        case 4:
+                                            it.nama = 'SMP';
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    return it;
+                                });
+
+                                this.kategori = items.kategori.map(it => {
+                                    switch (parseInt(it.kategori)) {
+                                        case 1:
+                                            it.nama = 'PAUD';
+                                            break;
+                                        case 2:
+                                            it.nama = 'TK';
+                                            break;
+                                        case 3:
+                                            it.nama = 'SD';
+                                            break;
+                                        case 4:
+                                            it.nama = 'SMP';
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    return it;
+                                });
+
+                                // Sum per kategori
+                                this.totalPerKategori = 0;
+                                this.totalSiswaPerKategori = 0;
+                                this.kategori.forEach(x => {
+                                    this.totalPerKategori += parseInt(x.total);
+                                });
+                                this.jumlahCount.forEach(x => {
+                                    this.totalSiswaPerKategori += parseInt(x.total);
+                                });
+                            })
+                            .catch(err => {
+                                console.log(err);
+                            })
+                            .then(() => {
+                                
+                                return this.getSelectedMap(kecs)
+                                    .then(items => { 
+                                        if (this.state == 'map') {
+                                            initMap();
+                                            this.items = items;
+                                            this.rebuildMarkers(this.items); 
+                                        } else {
+                                            this.onChartActive();
+                                        }
+                                    });
+                            });
+                    },
+                    removeMarkers () {
+                        gmarkers.forEach(gm => {
+                            gm.setMap(null);
+                        });
+                    },
+                    rebuildMap () {
+                        initMap();
+                    },
+                    rebuildMarkers (items) {
+                        console.log('Rebuild Markers', items);
+                        this.removeMarkers();
+                        gmarkers = [];
+                        var marker, i;
+
+                        for (i = 0; i < items.length; i++) {  
+                            marker = new google.maps.Marker({
+                                position: new google.maps.LatLng(items[i]['latitude'], items[i]['longitude']),
+                                map: map
+                            });
+                            gmarkers.push(marker);
+
+                            google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                                return function() {
+                                    infowindow.setContent(`<div><a href="/app/guest/index.php?sekolahId=${items[i]['id']}">${items[i]['nama']}</a></div>`);
+                                    infowindow.open(map, marker);
+                                }
+                            })(marker, i));
+                        }
+                    },
+                    getSelectedMap (kecs) {
+                        return axios.post('/app/api/getSekolahByKecamatan.php', { kecamatan: kecs })
+                            .then(resp => resp.data);
+                    }
+                }
+            });
+        </script>
+	</body>
+</html>
