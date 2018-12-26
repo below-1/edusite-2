@@ -32,9 +32,36 @@
         $data['items'] = $selectResult;
     }
     if ($menu == 'tingkatlulus') {
-        $query = $entity_manager->createQuery("SELECT ds FROM Edusite\Model\Sekolah s JOIN Edusite\Model\DeskripsiTahun ds WHERE ds.sekolah = $sekolahId ORDER BY ds.tahun ASC");
+        $query = $entity_manager->createQuery("SELECT 
+            ds FROM Edusite\Model\Sekolah s 
+            JOIN Edusite\Model\DeskripsiTahun ds 
+            WHERE ds.sekolah = $sekolahId ORDER BY ds.tahun ASC");
         $selectResult = $query->getResult();
-        $data['items'] = $selectResult;
+        $presentasiList = array_map(function ($ds) use ($sekolah) {
+            $total = 0;
+            $presentasi = 'Tidak Diketahui';
+            $sk = $sekolah->getKategori();
+            $isSmp = ($sk == 4);
+            $isSd = ($sk == 3);
+
+            if ($isSmp) {
+                $total = $ds->getJs1() + $ds->getJs2() + $ds->getJs3() + $ds->getJs4() + $ds->getJs5() + $ds->getJs6();
+            } else if ($isSd) {
+                $total = $ds->getJs1() + $ds->getJs2() + $ds->getJs3();
+            }
+            if ($total != '0') {
+                $presentasi = $ds->getJumlahLulus() / floatval($total) * 100;
+            }
+
+            return $presentasi;
+        }, $selectResult);
+        echo $twig->render("guest/$menu.html", array(
+            'sekolah' => $sekolah, 
+            'items' => $selectResult,
+            'presentasi' => $presentasiList,
+            'totalData' => count($selectResult)
+        ));
+        die();
     }
     if ($menu == 'lanjutstudi') {
         $query = $entity_manager->createQuery("SELECT ds FROM Edusite\Model\Sekolah s JOIN Edusite\Model\DeskripsiTahun ds WHERE ds.sekolah = $sekolahId ORDER BY ds.tahun ASC");

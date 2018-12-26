@@ -23,9 +23,16 @@
                 </div>
 
                 <div class="form-group row">
-                    <label class="col-sm-4 col-form-label">NIP/NUPTK</label>
+                    <label class="col-sm-4 col-form-label">NIP</label>
                     <div class="col-sm-8">
                         <input type="text" name="nip" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label">NUPTK</label>
+                    <div class="col-sm-8">
+                        <input type="text" name="nuptk" class="form-control">
                     </div>
                 </div>
 
@@ -104,53 +111,26 @@
     <div class="panel panel-default">
         <div class="panel-heading">Data Pegawai</div>
         <div class="panel-body">
-            <table class="table table-responsive">
+            <table id="myTable">
                 <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th>Jabatan</th>
-                        <th>Status</th>
-                        <th>
-                            
-                        </th>
-                    </tr>
+                    <th>Nip</th>
+                    <th>Nama</th>
+                    <th>NUPTK</th>
+                    <th>Kategori</th>
+                    <th>Golongan/Ruang</th>
+                    <th>Status</th>
+                    <th></th>
                 </thead>
                 <tbody>
                     {% for item in items %}
                         <tr>
-                            <td style="width: 50%;">
-                                <div class="compact-cell">
-                                    <div class="top">{{item.nama|e}}</div>
-                                    <div class="middle">
-                                        {{item.nip|e}}, {{item.golongan|e}}
-                                    </div>
-                                    <div class="bottom">
-                                        {{item.tempatLahir|e}}, {{item.tanggalLahir|date('Y/m/d')}}
-                                    </div>
-                                </div>
-                            </td>
+                            <td>{{item.nip|e}}</td>
+                            <td>{{item.nama|e}}</td>
+                            <td>{{item.nuptk|e}}</td>
                             <td>
-                                <div class="compact-cell">
-                                    <div class="middle">
-                                        {{ (item.kategori == 1) ? 'PNS' : 'Non PNS' }}
-                                    </div>
-                                    <div class="bottom">
-                                        {% if item.pendTerakhir == 1 %}
-                                            SLTA
-                                        {% elseif item.pendTerakhir == 2 %}
-                                            D1
-                                        {% elseif item.pendTerakhir == 3 %}
-                                            D2
-                                        {% elseif item.pendTerakhir == 4 %}
-                                            S1
-                                        {% elseif item.pendTerakhir == 5 %}
-                                            S2
-                                        {% endif %}
-                                    </div>
-                                </div>
+                                {{ (item.kategori == 1) ? 'PNS' : 'Non PNS' }}
                             </td>
-                            <td>{{ item.jabatan|e }}</td>
+                            <td>{{ item.golongan|e }}</td>
                             <td>{{ item.status|e }}</td>
                             <td>
                                 <a href="/app/user/index.php?menu=pegawaipns&page=update&id={{ item.id|e }}" class="btn btn-sm btn-primary">
@@ -166,4 +146,13 @@
             </table>
         </div>
     </div>
+{% endblock %}
+
+{% block extraScripts %}
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready( function () {
+            $('#myTable').DataTable();
+        } );
+    </script>
 {% endblock %}

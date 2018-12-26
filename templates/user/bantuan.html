@@ -24,9 +24,28 @@
                 </div>
 
                 <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Tipe</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" name="tipeAlat">
+                            <option>MEBELER</option>
+                            <option>ALAT PERAGA</option>
+                            <option>LABORATORIUM</option>
+                            <option>PERALATAN UKS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Tahun</label>
                     <div class="col-sm-8">
                         <input type="number" min="1900" name="tahun" class="form-control">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Jumlah</label>
+                    <div class="col-sm-8">
+                        <input type="number" min="0" name="jumlah" class="form-control">
                     </div>
                 </div>
 
@@ -58,8 +77,10 @@
                 <thead>
                     <tr>
                         <th>Nama</th>
-                        <th>Tipe</th>
+                        <th>Tipe Bantuan</th>
+                        <th>Tipe Alat</th>
                         <th>Tahun</th>
+                        <th>Jumlah</th>
                         <th>Kondisi</th>
                         <th>
                             
@@ -77,7 +98,9 @@
                                     Pengadaan
                                 {% endif %}
                             </td>
+                            <td>{{ item.tipeAlat|e }}</td>
                             <td>{{ item.tahun|e }}</td>
+                            <td>{{ item.jumlah|e }}</td>
                             <td>{{ item.kondisi|e }}</td>
                             <td>
                                 <a class="btn btn-sm btn-primary" href="/app/user/index.php?menu=bantuan&page=update&id={{ item.id }}">

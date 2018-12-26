@@ -32,10 +32,30 @@
                 </div>
 
                 <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Tipe</label>
+                    <div class="col-sm-8">
+                        <select class="form-control" name="tipeAlat">
+                            <option {% if (b.tipeAlat == 'MEBELER') %} selected {% endif %}>MEBELER</option>
+                            <option {% if (b.tipeAlat == 'ALAT PERAGA') %} selected {% endif %}>ALAT PERAGA</option>
+                            <option {% if (b.tipeAlat == 'LABORATORIUM') %} selected {% endif %}>LABORATORIUM</option>
+                            <option {% if (b.tipeAlat == 'PERALATAN') %} selected {% endif %}>PERALATAN UKS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group row">
                     <label class="col-sm-2 col-form-label">Tahun</label>
                     <div class="col-sm-8">
                         <input type="number" min="1990" name="tahun" class="form-control"
                           value="{{ b.tahun }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Jumlah</label>
+                    <div class="col-sm-8">
+                        <input type="number" min="0" name="jumlah" class="form-control"
+                          value="{{ b.jumlah }}">
                     </div>
                 </div>
 

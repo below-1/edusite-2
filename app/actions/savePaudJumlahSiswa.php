@@ -21,9 +21,12 @@
     $sekolah->setPaud23($paud23);
     $sekolah->setPaud34($paud34);
 
+    $total = intval($paudLakiLaki) + intval($paudPerempuan);
+    $sekolah->setJumlahSiswa($total);
+
     $entity_manager->persist($sekolah);
     $entity_manager->flush();
 
-    header("Location: /app/user/index.php?menu=paudjumlahsiswa");
+    header("Location: /app/user/index.php?menu=jumlahsiswa");
     die();
 ?>

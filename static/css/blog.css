@@ -1,0 +1,13 @@
+.blog-post p {
+  font-size: 16px;
+}
+
+.my-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.my-row .my-col {
+  flex-grow: 2;
+}

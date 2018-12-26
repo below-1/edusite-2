@@ -27,7 +27,7 @@
     $qResult = $mysqli->query($qs);
     $kategoriCount = $qResult->fetch_all(MYSQLI_ASSOC);
 
-    $allKategori = [1, 2, 3, 4];
+    $allKategori = [1, 2, 3, 4, 5];
     $existKey = array_map(function ($kc) {  return $kc['kategori']; }, $kategoriCount);
     
     // Fill empty values kategoriCount
@@ -45,7 +45,7 @@
     $qResult = $mysqli->query("SELECT s.statusAkreditasi as akreditasi, COUNT(s.statusAkreditasi) as total FROM sekolah s WHERE s.kecamatan in ($selKec) GROUP BY s.statusAkreditasi");
     $akreditasiCount = $qResult->fetch_all(MYSQLI_ASSOC);
 
-    $allAkreditasi = ['A', 'B', 'C', 'D', 'BELUM'];
+    $allAkreditasi = ['A', 'B', 'C', 'D', 'TT'];
     $existKey = array_map(function ($kc) {  return $kc['akreditasi']; }, $akreditasiCount);
     // Fill empty values kategoriCount
     foreach ($allAkreditasi as $k) {
@@ -58,8 +58,9 @@
     }
 
     // 4. Swasta dan Negri
-    $qStr = "SELECT s.negriSwasta as sn, COUNT(s.negriSwasta) as total FROM sekolah s WHERE s.kecamatan in ($selKec) GROUP BY s.negriSwasta";
+    $qStr = "SELECT s.negriSwasta as sn, COUNT(s.negriSwasta) as total FROM sekolah s WHERE s.kecamatan in ($selKec) AND s.negriSwasta IS NOT NULL GROUP BY sn";
     // echo $qStr;
+    // die();
     $qResult = $mysqli->query($qStr);
     $snCount = $qResult->fetch_all(MYSQLI_ASSOC);
     $allPossible = ['SWASTA', 'NEGRI'];
@@ -135,7 +136,7 @@
     $qResult = $mysqli->query("SELECT s.kategori as kategori, SUM(s.JumlahSiswa) as total FROM sekolah s WHERE s.kecamatan in ($selKec) GROUP BY s.kategori");
     $jumlahCount = $qResult->fetch_all(MYSQLI_ASSOC);
 
-    $allKategori = [1, 2, 3, 4];
+    $allKategori = [1, 2, 3, 4, 5];
     $existKey = array_map(function ($kc) {  return $kc['kategori']; }, $jumlahCount);
     // Fill empty values kategoriCount
     foreach ($allKategori as $k) {

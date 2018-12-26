@@ -62,8 +62,6 @@
                         <th>SMP Swasta</th>
                         <th>MTs</th>
                         <th>Pontren</th>
-                        <th>
-                        </th>
                     </tr>
                 {% elseif (sekolah.kategori == 4) %}
                     <tr>
@@ -73,8 +71,6 @@
                         <th>SMA Swasta</th>
                         <th>MAN</th>
                         <th>Pontren</th>
-                        <th>
-                        </th>
                     </tr>
                 {% endif %}
             </thead>
@@ -83,20 +79,11 @@
                     {% for item in items %}
                         <tr>
                             <td>{{ item.tahun|e }}</td>
-                            <td>{{ item.jumlahSiswa|e }}</td>
-                            <td>{{ item.getLanjutSMAN()|e }}</td>
+                            <td>{{ (item.lanjutSMAN + item.lanjutSMAS + item.lanjutMAN + item.lanjutPontren) |e }}</td>
+                            <td>{{ item.lanjutSMAN|e }}</td>
                             <td>{{ item.lanjutSMAS|e }}</td>
                             <td>{{ item.lanjutMAN|e }}</td>
                             <td>{{ item.lanjutPontren|e }}</td>
-                            <td></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </button>
-                            </td>
                         </tr>
                     {% endfor %}
                 {% elseif (sekolah.kategori == 3) %}
@@ -108,15 +95,6 @@
                             <td>{{ item.lanjutSMPS|e }}</td>
                             <td>{{ item.lanjutMTS|e }}</td>
                             <td>{{ item.lanjutPontren|e }}</td>
-                            <td></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary">
-                                    <span class="glyphicon glyphicon-pencil"></span>
-                                </button>
-                                <button class="btn btn-sm btn-danger">
-                                    <span class="glyphicon glyphicon-trash"></span>
-                                </button>
-                            </td>
                         </tr>
                     {% endfor %}
                 {% endif %}

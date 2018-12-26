@@ -7,6 +7,7 @@
         $alamat = $_POST['alamat'];
         $kelurahanDesa = $_POST['kelurahanDesa'];
         $kabupaten = $_POST['kabupaten'];
+        $kecamatan = $_POST['kecamatan'];
         $provinsi = 'NTT';
         $kodePos = $_POST['kodePos'];
         $telepon = $_POST['telepon'];
@@ -22,6 +23,7 @@
     $sekolah->setAlamat($alamat);
     $sekolah->setKelurahanDesa($kelurahanDesa);
     $sekolah->setKabupaten($kabupaten);
+    $sekolah->setKecamatan($kecamatan);
     $sekolah->setProvinsi($provinsi);
     $sekolah->setKodePos($kodePos);
     $sekolah->setTelepon($telepon);

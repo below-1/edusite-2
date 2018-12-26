@@ -8,6 +8,7 @@
         $kategori = $_POST['kategori'];
         $kondisi = $_POST['kondisi'];
         $tahun = $_POST['tahun'];
+        $jumlah = $_POST['jumlah'];
 
     } catch (Exception $ex) {
         $data = array('message' => 'Error parsing form');
@@ -23,6 +24,7 @@
     $f->setKategori($kategori);
     $f->setKondisi($kondisi);
     $f->setSekolah($sekolah);
+    $f->setJumlah($jumlah);
 
     $entity_manager->persist($f);
     $entity_manager->flush();

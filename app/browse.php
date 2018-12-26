@@ -31,6 +31,18 @@
     $allKecamatan = $allKecamatanQuery->fetch_all(MYSQLI_ASSOC);
     $data['kecamatan'] = $allKecamatan;
 
+    $qs = "SELECT * FROM news ORDER BY waktu LIMIT 3";
+    $newsQR = $mysqli->query($qs);
+    $newsList = [];
+    while ($row = $newsQR->fetch_array()) {
+      array_push($newsList, $row);
+    }
+    $newsList = array_map(function ($it) {
+        return json_encode($it);
+    }, $newsList);
+    $newsList = implode(',', $newsList);
+    $data['newsList'] = $newsList;
+
     if (isset($_SESSION['sekolahId'])) {
         $data['loggedIn'] = true;
     }

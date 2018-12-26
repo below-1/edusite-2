@@ -9,16 +9,15 @@
                     <tr>
                         <th>Tahun</th>
                         <th>Jumlah</th>
-                        <th>
-                            
-                        </th>
+                        <th>Presentasi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in items %}
+                    {% for i in range(0, totalData - 1) %}
                         <tr>
-                            <td>{{ item.tahun|e }}</td>
-                            <td>{{ item.jumlahLulus|e }}</td>
+                            <td>{{ items[i].tahun|e }}</td>
+                            <td>{{ items[i].jumlahLulus|e }}</td>
+                            <td>{{ presentasi[i]|e|number_format(2) }} %</td>
                         </tr>
                     {% endfor %}
                 </tbody>

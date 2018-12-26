@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+      {{ include('commons/head.html') }}
+      <link rel="stylesheet" href="/static/css/main.css">
+			<link rel="stylesheet" href="/static/css/quill.snow.css">
+  </head>
+  <body>
+
+		{{ include('commons/adnews-header.html') }}
+
+		<div id="editor" class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="panel panel-info">
+							<div class="panel-heading">
+								Edit Data Berita
+							</div>
+							<form class="panel-body" id="main-form" enctype="multipart/form-data">
+								<div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Judul</label>
+                    <div class="col-sm-8">
+                        <input id="title" name="title" class="form-control">
+                    </div>
+                </div>
+
+								<div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Deskripsi</label>
+                    <div class="col-sm-8">
+                        <input id="subtitle" name="subtitle" class="form-control">
+                    </div>
+                </div>
+
+								<div class="form-group row">
+                    <label class="col-sm-4 col-form-label">Gambar</label>
+                    <div class="col-sm-8">
+                        <input id="gambar" required name="gambar" type="file" class="form-control-file">
+                    </div>
+                </div>
+
+								<div class="form-group row">
+                    <label class="col-sm-4 col-form-label"></label>
+                    <div class="col-sm-8">
+                        <button id="save-button" type="button" class="btn btn-lg btn-primary">Simpan</button>
+                    </div>
+                </div>
+
+							</form>
+						</div>
+
+						<div id="toolbar"></div>
+						<div id="content-editor">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <!-- Footer -->
+		<footer id="footer" class="section">
+
+			<!-- container -->
+			<div class="container">
+
+				<!-- row -->
+				<div class="row">
+
+					<!-- footer logo -->
+					<div class="col-md-6">
+						<div class="footer-logo">
+							<a class="logo" href="index.html">
+								<img src="./img/logo.png" alt="logo">
+							</a>
+						</div>
+					</div>
+					<!-- footer logo -->
+
+					<!-- footer nav -->
+					<div class="col-md-6">
+						<ul class="footer-nav">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="#">About</a></li>
+							<li><a href="#">Courses</a></li>
+							<li><a href="blog.html">Blog</a></li>
+							<li><a href="contact.html">Contact</a></li>
+						</ul>
+					</div>
+					<!-- /footer nav -->
+
+				</div>
+				<!-- /row -->
+
+				<!-- row -->
+				<div id="bottom-footer" class="row">
+
+					<!-- social -->
+					<div class="col-md-4 col-md-push-8">
+						<ul class="footer-social">
+							<li><a href="#" class="facebook"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#" class="twitter"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a></li>
+							<li><a href="#" class="instagram"><i class="fa fa-instagram"></i></a></li>
+							<li><a href="#" class="youtube"><i class="fa fa-youtube"></i></a></li>
+							<li><a href="#" class="linkedin"><i class="fa fa-linkedin"></i></a></li>
+						</ul>
+					</div>
+					<!-- /social -->
+
+					<!-- copyright -->
+					<div class="col-md-8 col-md-pull-4">
+						<div class="footer-copyright">
+							<span>&copy; Copyright 2018. All Rights Reserved. | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com">Colorlib</a></span>
+						</div>
+					</div>
+					<!-- /copyright -->
+
+				</div>
+				<!-- row -->
+
+			</div>
+			<!-- /container -->
+
+		</footer>
+		<!-- /Footer -->
+
+		<!-- preloader -->
+		<div id='preloader'><div class='preloader'></div></div>
+
+    {{ include('commons/bottom-script.html') }}
+		<script type="text/javascript" src="/static/js/quill.js"></script>
+		<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+		<script>
+			$(document).ready(function () {
+				var options = {
+					modules: {
+						toolbar: [
+							['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+							['blockquote', 'code-block'],
+
+							[{ 'header': 1 }, { 'header': 2 }],               // custom button values
+							[{ 'list': 'ordered'}, { 'list': 'bullet' }],
+							[{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+							[{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+							[{ 'direction': 'rtl' }],                         // text direction
+
+							[{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+							[{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+							[{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+							[{ 'font': [] }],
+							[{ 'align': [] }],
+
+							['clean']                    
+						]
+					},
+					placeholder: 'Compose an epic...',
+					theme: 'snow'
+				};
+				var editor = new Quill('#content-editor', options);
+
+				$('#save-button').click(function () {
+					var fd = new FormData($('#main-form')[0]);
+					var content  = editor.root.innerHTML;
+					fd.append('content', content);
+
+					axios.post('/app/actions/create-news.php', fd)
+						.then(resp => resp.data)
+						.then(data => {
+							console.log(data);
+							let id = data.id;
+							window.location = '/app/news-detail.php?id=' + id;
+						})
+						.catch(err => {
+							console.log('THIS IS ABSOLUTE');
+						});
+				});
+			});
+		</script>
+  </body>
+</html>

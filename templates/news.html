@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+      {{ include('commons/head.html') }}
+      <link rel="stylesheet" href="/static/css/main.css">
+      <link rel="stylesheet" href="/static/css/blog.css">
+  </head>
+  <body>
+
+    {% if loggedIn is defined %}
+        {{ include('commons/header-user.html') }}
+    {% else %}
+        {{ include('commons/guest-header.html') }}
+    {% endif %}
+
+		<!-- Blog -->
+		<div id="blog" class="section">
+
+			<!-- container -->
+			<div class="container">
+
+				<!-- row -->
+				<div class="row">
+
+					<!-- main blog -->
+					<div id="main" class="col-md-12">
+
+						<!-- row -->
+						<div class="row">
+
+              {% for row in items %}
+							<!-- single blog -->
+							<div class="col-md-4">
+								<div class="single-blog">
+									<div class="blog-img">
+										<a href="/app/news-detail.php?id={{ row['id'] }}">
+											<img src="{{ row['gambar'] }}" alt="">
+										</a>
+									</div>
+									<h4><a href="blog-post.html">{{ row['title'] }}.</a></h4>
+									<div class="blog-meta">
+										<span class="blog-meta-author">By: <a href="#">Admin</a></span>
+										<div class="pull-right">
+											<span>{{row['waktu']}}</span>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- /single blog -->
+              {% endfor %}
+
+						</div>
+						<!-- /row -->
+
+						<!-- row -->
+						<div class="row">
+
+							<!-- pagination -->
+							<div class="col-md-12">
+								<div class="post-pagination">
+									<a href="#" class="pagination-back pull-left">Back</a>
+									<ul class="pages">
+										<li class="active">1</li>
+										<li><a href="#">2</a></li>
+										<li><a href="#">3</a></li>
+										<li><a href="#">4</a></li>
+									</ul>
+									<a href="#" class="pagination-next pull-right">Next</a>
+								</div>
+							</div>
+							<!-- pagination -->
+
+						</div>
+						<!-- /row -->
+					</div>
+					<!-- /main blog -->
+
+				</div>
+				<!-- row -->
+
+			</div>
+			<!-- container -->
+
+		</div>
+		<!-- /Blog -->
+
+    
+    {{ include('commons/footer.html') }}
+		<!-- preloader -->
+		<div id='preloader'><div class='preloader'></div></div>
+
+    {{ include('commons/bottom-script.html') }}
+  </body>
+</html>

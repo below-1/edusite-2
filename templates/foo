@@ -1,0 +1,39 @@
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA1UhV7s_4c-E3p33HyK_P-N7uEs8qqfpg&language=id&region=ID"></script>
+
+<script>
+  var map;
+  var gmarkers = [];
+  var infowindow = new google.maps.InfoWindow();
+
+  function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+          center: {lat: -9.859565, lng: 124.278409},
+          zoom: 14,
+          mapTypeId: google.maps.MapTypeId.ROADMAP,
+          mapTypeControl: false
+      });
+      
+      var locations = [
+          {% for it in mapItems %}
+              ["{{ it['nama'] }}", {{ it['latitude'] }}, {{ it['longitude'] }}, 4, {{ it['id'] }}],
+          {% endfor %}
+      ];
+
+      var marker, i;
+
+      for (i = 0; i < locations.length; i++) {  
+          marker = new google.maps.Marker({
+              position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+              map: map
+          });
+          gmarkers.push(marker);
+
+          google.maps.event.addListener(marker, 'click', (function(marker, i) {
+              return function() {
+                  infowindow.setContent(`<div><a href="/app/guest/index.php?sekolahId=${locations[i][4]}">${locations[i][0]}</a></div>`);
+                  infowindow.open(map, marker);
+              }
+          })(marker, i));
+      }
+  }
+</script>

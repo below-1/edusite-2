@@ -33,9 +33,13 @@ class Bantuan {
     protected $tipeBantuan;
 
     /**
-     * @Column(type="integer",  nullable=true)
+     * @Column(type="string",  nullable=true)
      */
     protected $tipeAlat;
+    /**
+     * @Column(type="integer",  nullable=true)
+     */
+    protected $jumlah;
 
     /**
      * @Column(type="string", nullable=true)
@@ -45,6 +49,7 @@ class Bantuan {
     public function getId() { return $this->id; }
     public function getSekolah() { return $this->sekolah; }
     public function getTahun() { return $this->tahun; }
+    public function getJumlah() { return $this->jumlah; }
     public function getNama() { return $this->nama; }
     public function getTipeBantuan() { return $this->tipeBantuan; }
     public function getTipeAlat() { return $this->tipeAlat; }
@@ -52,6 +57,7 @@ class Bantuan {
 
     public function setSekolah($val) { $this->sekolah = $val; }
     public function setTahun($val) { $this->tahun = $val; }
+    public function setJumlah($val) { $this->jumlah = $val; }
     public function setNama($val) { $this->nama = $val; }
     public function setTipeBantuan($val) { $this->tipeBantuan = $val; }
     public function setTipeAlat($val) { $this->tipeAlat = $val; }

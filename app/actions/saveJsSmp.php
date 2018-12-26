@@ -27,12 +27,20 @@
         $sekolah = $entity_manager->find('Edusite\Model\Sekolah', $sekolahId);
         $ds->setSekolah($sekolah);
     } else {
-        $ds = $entity_manager->find('Edusite\Model\DeskripsiTahun', $selectResult[0]->getId());
+        $ds = $entity_manager->find('Edusite\Model\DeskripsiTahun', $selectResult[0]['id']);
     }
 
     $ds->setJs1($js1);
     $ds->setJs2($js2);
     $ds->setJs3($js3);
+    
+    if ($tahun == date('Y')) {
+        $sekolah = $entity_manager->find('Edusite\Model\Sekolah', $sekolahId);
+        $ds->setSekolah($sekolah);
+        $total = intval($js1) + intval($js2) + intval($js3);
+        $sekolah->setJumlahSiswa($total);
+    }
+
     $entity_manager->persist($ds);
     $entity_manager->flush();
     

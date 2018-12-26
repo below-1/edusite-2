@@ -25,7 +25,12 @@
                     <div class="col-sm-8">
                         <select name="kecamatan" class="form-control">
                             {% for kit in kecItems %}
-                                <option value="{{ kit.nama|e }}">
+                                <option
+                                    value="{{ kit.nama|e }}"
+                                    {% if (kit.nama == sekolah.kecamatan) %}
+                                        selected
+                                    {% endif %}
+                                >
                                     {{ kit.nama|e }}
                                 </option>
                             {% endfor %}

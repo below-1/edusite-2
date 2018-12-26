@@ -6,6 +6,7 @@
         $sekolahId = $_SESSION['sekolahId'];
         $nama = $_POST['nama'];
         $nip = $_POST['nip'];
+        $nuptk = $_POST['nuptk'];
         $golongan = $_POST['golongan'];
         $jabatan = $_POST['jabatan'];
         $tempatLahir = $_POST['tempatLahir'];
@@ -25,6 +26,7 @@
     $p->setSekolah($sekolah);
     $p->setNama($nama);
     $p->setNip($nip);
+    $p->setNuptk($nuptk);
     $p->setKategori(1);
     $p->setGolongan($golongan);
     $p->setJabatan($jabatan);

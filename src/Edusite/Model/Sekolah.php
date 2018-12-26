@@ -181,7 +181,12 @@ class Sekolah {
     /**
      * @Column(type="string", nullable=true)
      */
-    protected $negriSwasta;
+    protected $negriSwasta = 'NEGRI';
+
+    /**
+     * @Column(type="integer")
+     */
+    protected $jumlahSiswa;
 
     public function getId() { return $this->id; }
     public function getKategori() { return $this->kategori; }
@@ -220,6 +225,7 @@ class Sekolah {
     public function getPaudPerempuan() { return $this->paudPerempuan; }
     public function getPaud23() { return $this->paud23; }
     public function getPaud34() { return $this->paud34; }
+    public function getJumlahSiswa() { return $this->jumlahSiswa; }
 
     public function setKategori($val) { $this->kategori = $val; }
     public function setNss($val) { $this->nss = $val; }
@@ -259,4 +265,5 @@ class Sekolah {
     public function setPaud34($val) { $this->paud34 = $val; }
 
     public function setNegriSwasta($val) { return $this->negriSwasta = $val; }
+    public function setJumlahSiswa($val) { return $this->jumlahSiswa = $val; }
 }

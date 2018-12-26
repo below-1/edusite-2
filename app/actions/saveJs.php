@@ -42,6 +42,14 @@
     $ds->setJs4($js4);
     $ds->setJs5($js5);
     $ds->setJs6($js6);
+
+    if ($tahun == date('Y')) {
+        $sekolah = $entity_manager->find('Edusite\Model\Sekolah', $sekolahId);
+        $ds->setSekolah($sekolah);
+        $total = intval($js1) + intval($js2) + intval($js3) + intval($js4) + intval($js5) + intval($js6);
+        $sekolah->setJumlahSiswa($total);
+    }
+
     $entity_manager->persist($ds);
     $entity_manager->flush();
     

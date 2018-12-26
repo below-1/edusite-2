@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+      {{ include('commons/head.html') }}
+      <link rel="stylesheet" href="/static/css/main.css">
+      <link rel="stylesheet" href="/static/css/blog.css">
+  </head>
+  <body>
+    <!-- Hero-area -->
+		{% if loggedIn is defined %}
+        {{ include('commons/header-user.html') }}
+    {% else %}
+        {{ include('commons/guest-header.html') }}
+    {% endif %}
+		<div class="hero-area section">
+
+			<!-- Backgound Image -->
+			<div class="bg-image bg-parallax overlay" style="background-image:url({{item['gambar']}})"></div>
+			<!-- /Backgound Image -->
+
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1 text-center">
+						<h1 class="white-text">{{item['title']|e}}</h1>
+						<ul class="blog-post-meta">
+							<li class="blog-meta-author">By : <a href="#">Admin</a></li>
+							<li>18 Oct, 2017</li>
+							<li class="blog-meta-comments"><a href="#"><i class="fa fa-comments"></i> 35</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+		</div>
+		<!-- /Hero-area -->
+
+		<!-- Blog -->
+		<div id="blog" class="section">
+
+			<!-- container -->
+			<div class="container">
+
+				<!-- row -->
+				<div class="row">
+
+					<!-- main blog -->
+					<div id="main" class="col-md-8 col-md-offset-2">
+
+						<!-- blog post -->
+						<div class="blog-post">
+							{{ item['content']|raw }}
+						</div>
+						<!-- /blog post -->
+
+						<!-- blog share -->
+						<div class="blog-share">
+							<h4>Share This Post:</h4>
+							<a href="#" class="facebook"><i class="fa fa-facebook"></i></a>
+							<a href="#" class="twitter"><i class="fa fa-twitter"></i></a>
+							<a href="#" class="google-plus"><i class="fa fa-google-plus"></i></a>
+						</div>
+						<!-- /blog share -->
+					</div>
+					<!-- /main blog -->
+
+				</div>
+				<!-- row -->
+
+			</div>
+			<!-- container -->
+
+		</div>
+		<!-- /Blog -->
+
+    
+		{{ include('commons/footer.html') }}
+		<!-- preloader -->
+		<div id='preloader'><div class='preloader'></div></div>
+
+    {{ include('commons/bottom-script.html') }}
+  </body>
+</html>

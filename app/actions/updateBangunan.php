@@ -7,6 +7,7 @@
         $nama = $_POST['nama'];
         $kategori = $_POST['kategori'];
         $tahun = $_POST['tahun'];
+        $jumlah = $_POST['jumlah'];
         $kondisi = $_POST['kondisi'];
 
     } catch (Exception $ex) {
@@ -20,6 +21,7 @@
     $f->setNama($nama);
     $f->setKategori($kategori);
     $f->setTahun($tahun);
+    $f->setJumlah($jumlah);
     $f->setKondisi($kondisi);
 
     $entity_manager->persist($f);

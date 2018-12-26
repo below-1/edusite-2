@@ -35,8 +35,8 @@
                     {% for item in items %}
                         <tr>
                             <td>{{ item.tahun|e }}</td>
-                            <td>{{ item.jumlahSiswa|e }}</td>
-                            <td>{{ item.getLanjutSMAN()|e }}</td>
+                            <td>{{ (item.lanjutSMAN + item.lanjutSMAS + item.lanjutMAN + item.lanjutPontren) |e }}</td>
+                            <td>{{ item.lanjutSMAN|e }}</td>
                             <td>{{ item.lanjutSMAS|e }}</td>
                             <td>{{ item.lanjutMAN|e }}</td>
                             <td>{{ item.lanjutPontren|e }}</td>
