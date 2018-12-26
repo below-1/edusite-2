@@ -2,10 +2,6 @@
     use Doctrine\ORM\Query\ResultSetMapping;
 
     session_start();
-    if (empty($_SESSION['admin_id'])) {
-      header('Location: /app/adnews/login.php');
-      die();
-    }
 
     require_once $_SERVER['DOCUMENT_ROOT'] . '/bootstrap.php';
     session_start();
@@ -17,6 +13,9 @@
     $result = $result->fetch_array();
 
     $data = array('item' => $result);
+    if (isset($_SESSION['sekolahId'])) {
+      $data['loggedIn'] = true;
+    }
 
     echo $twig->render('news-detail.html', $data);
 ?>
