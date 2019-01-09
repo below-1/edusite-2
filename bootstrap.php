@@ -13,9 +13,9 @@ $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__ . '/src/Edu
 //   'path' => __DIR__ . '/db.sqlite'
 // );
 $DB_NAME = 'edusite_db';
-$DB_USER = 'edusite';
-$DB_PASSWORD = 'edusite';
-$DB_HOST = 'db';
+$DB_USER = 'root';
+$DB_PASSWORD = '';
+$DB_HOST = 'localhost';
 $conn = array(
   'dbname' => $DB_NAME,
   'user' => $DB_USER,
